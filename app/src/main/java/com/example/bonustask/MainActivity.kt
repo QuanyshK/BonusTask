@@ -18,28 +18,26 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.frag_container, counterFragment, "CounterFragment")
+                .replace(R.id.frag_container, counterFragment)
                 .commit()
             activeFragment = counterFragment
         } else {
-            counterFragment = supportFragmentManager.findFragmentByTag("CounterFragment") as CounterFragment?
-                ?: CounterFragment()
-            secondFragment = supportFragmentManager.findFragmentByTag("SecondFragment") as SecondFragment?
-                ?: SecondFragment()
+            counterFragment = CounterFragment()
+            secondFragment =  SecondFragment()
 
             activeFragment = supportFragmentManager.findFragmentById(R.id.frag_container)
         }
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.counter -> switchFragment(counterFragment, "CounterFragment")
-                R.id.second_page -> switchFragment(secondFragment, "SecondFragment")
+                R.id.counter -> switchFragment(counterFragment)
+                R.id.second_page -> switchFragment(secondFragment)
             }
             true
         }
     }
 
-    private fun switchFragment(fragment: Fragment, tag: String) {
+    private fun switchFragment(fragment: Fragment) {
         if (activeFragment == fragment) return
 
         val transaction = supportFragmentManager.beginTransaction()
@@ -47,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         if (fragment.isAdded) {
             transaction.hide(activeFragment!!).show(fragment)
         } else {
-            transaction.hide(activeFragment!!).add(R.id.frag_container, fragment, tag)
+            transaction.hide(activeFragment!!).add(R.id.frag_container, fragment)
         }
 
         transaction.commit()
